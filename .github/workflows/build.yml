@@ -14,7 +14,7 @@ jobs:
         uses: microsoft/setup-msbuild@v1.0.2
 
       - name: Build with MSBuild
-        run: msbuild /t:restore /t:build /p:Configuration=Release
+        run: msbuild /t:restore /t:build /p:Configuration=Release /p:OutputPath=D:\a\lstva\lstva\output\bin
 
       - name: Upload
         uses: actions/upload-artifact@v3.1.1
