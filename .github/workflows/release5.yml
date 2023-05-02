@@ -28,7 +28,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Path D:\a\lstva\lstva\output
           Copy-Item -Path .\cert.pfx -Destination D:\a\lstva\lstva\output\cert.pfx -Force
-          msbuild /t:restore /t:build /p:Platform=x64 /p:Configuration=Release /p:PackageCertificateKeyFile=D:\a\lstva\lstva\cert.pfx /p:PackageCertificatePassword=test123456 /p:AppxPackageDir=D:\a\lstva\lstva\output\bin
+          msbuild /t:restore /t:build /p:Platform=x64 /p:Configuration=Release /p:PackageCertificateKeyFile=D:\a\lstva\lstva\BiliBili.UWP\App_TemporaryKey.pfx /p:AppxPackageDir=D:\a\lstva\lstva\output\bin
 
       - name: Upload
         uses: actions/upload-artifact@v3.1.1
