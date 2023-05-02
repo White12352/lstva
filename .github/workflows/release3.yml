@@ -13,6 +13,10 @@ jobs:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@v1.0.2
 
+      - name: Install Windows SDK
+        run: |
+          choco install windows-sdk-10-version-18362 -y
+      
       - name: Build with MSBuild
         run: msbuild /t:restore /t:build /p:Platform=x64 /p:Configuration=Release /p:AppxBundlePlatforms="x64" /p:AppxPackageDir=D:\a\lstva\lstva\output\bin /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Release
 
