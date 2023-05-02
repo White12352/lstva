@@ -26,7 +26,7 @@ jobs:
       
       - name: Build with MSBuild
         run: |
-          copy /y .\cert.pfx D:\a\lstva\lstva\output\cert.pfx
+          Copy-Item -Path .\cert.pfx -Destination D:\a\lstva\lstva\output\cert.pfx -Force
           msbuild /t:restore /t:build /p:Platform=x64 /p:Configuration=Release /p:AppxBundlePlatforms="x64" /p:AppxPackageDir=D:\a\lstva\lstva\output\bin /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Release /p:PackageCertificateKeyFile=.\cert.pfx /p:PackageCertificatePassword=test123456
 
       - name: Upload
