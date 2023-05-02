@@ -22,7 +22,7 @@ jobs:
         run: |
           $certPassword = ConvertTo-SecureString -String ${{ secrets.CERT_PASSWORD }} -Force -AsPlainText
           $cert = New-SelfSignedCertificate -DnsName "localhost" -CertStoreLocation "Cert:\LocalMachine\My" -FriendlyName "MyCert" -NotAfter (Get-Date).AddYears(10) -KeyUsage DigitalSignature, KeyEncipherment, DataEncipherment -KeyAlgorithm RSA -KeyLength 2048 -HashAlgorithm SHA256 -Provider "Microsoft Enhanced RSA and AES Cryptographic Provider"
-          Export-PfxCertificate -Cert $cert -FilePath cert.pfx -Password $certPassword
+          Export-PfxCertificate -Cert $cert -FilePath D:\a\lstva\lstva\cert.pfx -Password $certPassword
       
       - name: Build with MSBuild
         run: |
