@@ -1,0 +1,36 @@
+name: Build and Release5
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - name: Setup Windows 10 SDK Action
+        uses: GuillaumeFalourd/setup-windows10-sdk-action@v1.11
+        with:
+          sdk-version: 18362
+      
+      - name: Generate PFX certificate
+        run: |
+          makecert.exe -r -pe -n "CN=certificate" -ss My -sr LocalMachine -a sha256 -sky exchange -len 2048 -cy end -sv D:\a\lstva\lstva\output\certificate.pvk D:\a\lstva\lstva\output\certificate.cer
+          pvk2pfx.exe -pvk "D:\a\lstva\lstva\output\certificate.pvk" -spc "D:\a\lstva\lstva\output\certificate.cer" -pfx "D:\a\lstva\lstva\output\certificate.pfx"
+      
+      - name: Build with MSBuild
+        run: |
+          New-Item -ItemType Directory -Path D:\a\lstva\lstva\output
+          Copy-Item -Path .\cert.pfx -Destination D:\a\lstva\lstva\output\cert.pfx -Force
+          msbuild /t:restore /t:build /p:Platform=x64 /p:Configuration=Release /p:AppxBundlePlatforms="x64" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Release /p:PackageCertificateKeyFile=D:\a\lstva\lstva\output\certificate.pfx /p:AppxPackageDir=D:\a\lstva\lstva\output\bin
+
+      - name: Upload
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: "test"
+          path: D:\a\lstva\lstva\output\
