@@ -25,7 +25,12 @@ jobs:
           Export-PfxCertificate -Cert $cert -FilePath cert.pfx -Password $certPassword
       
       - name: Build with MSBuild
-        run: msbuild /t:restore /t:build /p:Platform=x64 /p:Configuration=Release /p:AppxBundlePlatforms="x64" /p:AppxPackageDir=D:\a\lstva\lstva\output\bin /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Release /p:AppxPackageSigningEnabled=false
+        run: |
+          $certPassword = ConvertTo-SecureString -String ${{ secrets.CERT_PASSWORD }} -Force -AsPlainText
+          $cert = Get-PfxCertificate -FilePath ${{ env.PFX_PATH }} -Password $certPassword
+          $certHash = $cert.GetCertHashString()
+          msbuild /t:restore /t:build /p:Platform=x64 /p:Configuration=Release /p:AppxBundlePlatforms="x64" /p:AppxPackageDir=D:\a\lstva\lstva\output\bin /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Release /p:PackageCertificateKeyFile=.\cert.pfx /p:PackageCertificatePassword=test123456
+          copy /y .\cert.pfx D:\a\lstva\lstva\output\cert.pfx
 
       - name: Upload
         uses: actions/upload-artifact@v3.1.1
